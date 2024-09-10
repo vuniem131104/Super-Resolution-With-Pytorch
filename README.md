@@ -59,4 +59,31 @@ It is composed of the following operations –
 ![image](https://github.com/user-attachments/assets/42df0edf-6c99-4439-b211-8d6f5aa74f52)
 
 ### DISCRIMINATOR UPDATE 
-- It is very straightforward because it just distinguish between high resolution images with real labels (1) and super resolution images with it real labels (0). 
+- It is very straightforward because it just distinguish between high resolution images with real labels (1) and super resolution images with it real labels (0).
+
+## TRAINING MODELS
+Our models are trained on COCO2024 dataset. If you want to train on your dataset, please do the following steps:
+
+### Train SRRESNET
+```bash
+python3 train_srresnet.py --data_folder <your data directory> --batch_size <your batch size> --epochs <epochs to train models>
+```
+
+### Train SRGAN
+```bash
+python3 train_srgan.py --data_folder <your data directory> --batch_size <your batch size> --epochs <epochs to train models>
+```
+
+## TESTING MODELS
+### Test SRRESNET with images
+```bash
+python3 test_srresnet.py --image_path <path to your image> --srresnet_ckpt <your srresnet checkpoint>
+```
+
+### Test SRGAN with images
+```bash
+python3 test_srgan.py --image_path <path to your image> --srgan_ckpt <your srgan checkpoint>
+```
+
+## RESULT
+Loading...
