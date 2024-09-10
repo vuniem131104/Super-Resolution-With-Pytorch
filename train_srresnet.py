@@ -6,7 +6,14 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm.auto import tqdm
 from torch.optim.lr_scheduler import StepLR
+import torch.backends.cudnn as cudnn
+import argparse
 
+parser = argparse.ArgumentParser(description="Train SRRESNET")
+parser.add_argument("--data_folder", type=str, default='./data', help="Data folder")
+parser.add_argument("--batch_size", type=int, default=64, help="batch size")
+parser.add_argument("--epochs", type=int, default=100, help="Epoch to train srresnet")
+args = parser.parse_args()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 base_lr = 5e-4
 wd = 1e-5
@@ -19,19 +26,21 @@ scaling_factor = 4
 model = SRResNet(in_channels, out_channels, small_kernel_size, large_kernel_size, n_residual_blocks, scaling_factor).to(device)
 optimizer = optim.Adam(model.parameters(), lr=base_lr, weight_decay=wd)
 criterion = nn.MSELoss().to(device)
-epochs = 100
+epochs = args.epochs
 step_train = 100
 step_val = 500
 batch_size = 64
 train_losses = []
 val_losses = []
-train_dataset = SRDataset('./data', 'train', 96, 4, 'imagenet-norm', '[-1, 1]')
-val_dataset = SRDataset('./data', 'val', 96, 4, 'imagenet-norm', '[-1, 1]')
-train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+train_dataset = SRDataset(args.data_folder, 'train', 96, 4, 'imagenet-norm', '[-1, 1]')
+val_dataset = SRDataset(args.data_folder, 'val', 96, 4, 'imagenet-norm', '[-1, 1]')
+train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+val_loader = DataLoader(val_dataset, batch_size=args.batch_size, shuffle=False)
 step_lr = StepLR(optimizer, step_size=10, gamma=0.1)
 best_val_loss = 1e9
 patience = 10
+
+cudnn.benchmark = True
 
 def train(model, optimizer, epoch, epochs, device, train_loader):
     model.train()
