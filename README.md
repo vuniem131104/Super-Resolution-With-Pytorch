@@ -86,4 +86,6 @@ python3 test_srgan.py --image_path <path to your image> --srgan_ckpt <your srgan
 ```
 
 ## RESULT
-Loading...
+![flowers](https://github.com/user-attachments/assets/bf2d44de-d458-4281-81cc-1654c4c559db)
+![man](https://github.com/user-attachments/assets/b17e1c5e-4e8c-44cc-9f6a-9963e72cfb1c)
+
